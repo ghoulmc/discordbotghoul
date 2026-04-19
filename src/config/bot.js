@@ -1,136 +1,111 @@
 import { logger } from '../utils/logger.js';
 
-
 export const botConfig = {
   // =========================
-  // BOT PREFIX
+  // PREFIJO DEL BOT
   // =========================
   prefix: "/",
 
   // =========================
-  // BOT PRESENCE (what users see under the bot name)
+  // PRESENCIA DEL BOT (Lo que aparece debajo del nombre)
   // =========================
-  // `status` options:
-  // - "online"    = green dot
-  // - "idle"      = yellow moon
-  // - "dnd"       = red do-not-disturb
-  // - "invisible" = appears offline
   presence: {
-    // Current online state shown on Discord.
-    status: "idle",
+    // Estado online: "online", "idle" (ausente), "dnd" (no molestar), "invisible"
+    status: "online",
 
-    // Activity lines shown under the bot name.
-    // `type` number mapping from Discord:
-    // 0 = Playing
-    // 1 = Streaming
-    // 2 = Listening
-    // 3 = Watching
-    // 4 = Custom
-    // 5 = Competing
+    // Líneas de actividad
     activities: [
       {
-        // Text users will see (example: "Playing /help | Titan Bot").
-        name: "ghoulmc.net",
-        // Activity type number (0 = Playing).
-        type: 0, 
+        name: "GhoulMC.net", // Texto que verán los usuarios
+        type: 0, // 0 = Jugando, 1 = Streaming, 2 = Escuchando, 3 = Viendo
       },
     ],
   },
 
   // =========================
-  // COMMAND BEHAVIOR
+  // COMPORTAMIENTO de COMANDOS
   // =========================
   commands: {
-    // Bot owner user IDs (comma-separated in OWNER_IDS env var).
-    // Owners can access owner/admin-level bot commands.
+    // IDs de los dueños (se sacan de las variables de entorno)
     owners: process.env.OWNER_IDS?.split(",") || [],
 
-    // Default wait time between command uses (in seconds).
+    // Tiempo de espera por defecto (segundos)
     defaultCooldown: 3, 
 
-    // If true, old commands are removed before re-registering.
+    // Si es true, borra comandos antiguos antes de registrar nuevos
     deleteCommands: false,
 
-    // Optional server ID used for testing slash commands quickly.
+    // ID del servidor de pruebas para registro rápido de Slash Commands
     testGuildId: process.env.TEST_GUILD_ID,
   },
 
   // =========================
-  // APPLICATIONS SYSTEM
+  // SISTEMA DE POSTULACIONES (APPLICATIONS)
   // =========================
   applications: {
-    // Default questions shown when someone fills out an application.
     defaultQuestions: [
-      { question: "Cual es tu Nombre?", required: true },
-      { question: "Cuantos años tienes?", required: true },
-      { question: "Porque te quieres unir?", required: true },
+      { question: "¿Cuál es tu nombre de usuario (IGN)?", required: true },
+      { question: "¿Qué edad tienes?", required: true },
+      { question: "¿Por qué quieres ser parte del Staff de GhoulMC?", required: true },
     ],
 
-    // Embed colors by application status.
+    // Colores de los embeds según el estado de la postulación
     statusColors: {
-      pending: "#FFA500",
-      approved: "#00FF00",
-      denied: "#FF0000",
+      pending: "#9B59B6", // Morado (Pendiente)
+      approved: "#2ECC71", // Verde (Aprobado)
+      denied: "#E74C3C",   // Rojo (Denegado)
     },
 
-    // How long users must wait before submitting another application (hours).
-    applicationCooldown: 24, 
-
-    // Auto-delete denied applications after this many days.
-    deleteDeniedAfter: 7, 
-
-    // Auto-delete approved applications after this many days.
-    deleteApprovedAfter: 30, 
-
-    // Role IDs allowed to manage applications.
-    managerRoles: [], // Will be populated from environment or database
+    applicationCooldown: 24, // Horas de espera para volver a postularse
+    deleteDeniedAfter: 7,    // Días para borrar rechazadas
+    deleteApprovedAfter: 30, // Días para borrar aprobadas
+    managerRoles: [],        // Roles que gestionan esto
   },
 
   // =========================
-  // EMBED COLORS & BRANDING
+  // COLORES Y MARCA (EMBEDS)
   // =========================
-  // IMPORTANT: This is the SINGLE SOURCE OF TRUTH for all bot colors
+  // Esta es la paleta de colores principal para GhoulMC
   embeds: {
     colors: {
-      // Main brand colors.
-      primary: "#336699", 
-      secondary: "#2F3136", 
+      primary: "#7d5bbe",    // Morado Ghoul Principal
+      secondary: "#1a1a1a",  // Negro casi puro
 
-      // Standard status colors for success/error/warning/info messages.
-      success: "#57F287", 
-      error: "#ED4245", 
-      warning: "#FEE75C", 
-      info: "#3498DB", 
+      // Colores de estado estándar
+      success: "#00FF7F",    // Verde Neón
+      error: "#FF4500",      // Naranja-Rojo
+      warning: "#F1C40F",    // Amarillo
+      info: "#3498DB",       // Azul
 
-      // Neutral utility colors.
-      light: "#FFFFFF",
-      dark: "#202225",
-      gray: "#99AAB5",
+      // Colores neutros
+      light: "#F5F5F5",
+      dark: "#0B0B0B",
+      gray: "#7F8C8D",
 
-      // Discord-style palette shortcuts.
+      // Atajos de paleta estilo Discord
       blurple: "#5865F2",
-      green: "#57F287",
+      green: "#2ECC71",
       yellow: "#FEE75C",
       fuchsia: "#EB459E",
       red: "#ED4245",
       black: "#000000",
 
-      // Feature-specific colors.
+      // Colores específicos de funciones
       giveaway: {
-        active: "#57F287",
-        ended: "#ED4245",
+        active: "#7d5bbe",
+        ended: "#23272a",
       },
       ticket: {
-        open: "#57F287",
-        claimed: "#FAA61A",
+        open: "#00FF7F",
+        claimed: "#F1C40F",
         closed: "#ED4245",
         pending: "#99AAB5",
       },
-      economy: "#F1C40F",
+      economy: "#FFD700", // Oro
       birthday: "#E91E63",
       moderation: "#9B59B6",
 
-      // Ticket priority color mapping.
+      // Prioridad de tickets
       priority: {
         none: "#95A5A6",
         low: "#3498db",
@@ -140,325 +115,175 @@ export const botConfig = {
       },
     },
     footer: {
-      // Default footer text used in bot embeds.
-      text: "Ghoul Bot",
-      // Footer icon URL (null = no icon).
+      text: "GhoulMC - El servidor con más alma",
       icon: null,
     },
-    // Default thumbnail URL for embeds (null = no thumbnail).
     thumbnail: null,
     author: {
-      // Optional default embed author block.
-      name: null,
+      name: "GhoulMC Network",
       icon: null,
-      url: null,
+      url: "https://ghoulmc.net",
     },
   },
 
   // =========================
-  // ECONOMY SETTINGS
+  // ECONOMÍA
   // =========================
   economy: {
     currency: {
-      // Currency display name.
-      name: "coins",
-      // Plural display name.
-      namePlural: "coins",
-      // Currency symbol shown in balances.
-      symbol: "$",
+      name: "GhoulCoin",
+      namePlural: "GhoulCoins",
+      symbol: "☠️",
     },
-
-    // Starting balance for new users.
-    startingBalance: 0,
-
-    // Maximum bank amount before upgrades (if upgrades are used).
+    startingBalance: 100,
     baseBankCapacity: 100000,
-
-    // Daily reward amount.
-    dailyAmount: 100,
-
-    // Work command random payout range.
-    workMin: 10,
-    workMax: 100,
-
-    // Beg command random payout range.
-    begMin: 5,
-    begMax: 50,
-
-    // Chance to succeed when robbing (0.4 = 40%).
-    robSuccessRate: 0.4,
-
-    // Jail time after failed rob (milliseconds).
-    // 3600000 = 1 hour.
-    robFailJailTime: 3600000, 
+    dailyAmount: 200,
+    workMin: 50,
+    workMax: 250,
+    begMin: 10,
+    begMax: 80,
+    robSuccessRate: 0.35, // 35% de éxito al robar
+    robFailJailTime: 3600000, // 1 hora de cárcel
   },
 
   // =========================
-  // SHOP SETTINGS
-  // =========================
-  // Add shop defaults here when needed.
-  shop: {
-    
-  },
-
-  // =========================
-  // TICKET SYSTEM
+  // SISTEMA DE TICKETS
   // =========================
   tickets: {
-    // Category ID where new tickets are created (null = no forced category).
     defaultCategory: null,
-
-    // Role IDs allowed to manage/support tickets.
     supportRoles: [],
-
-    // Priority options users/staff can assign.
     priorities: {
-      none: {
-        emoji: "⚪",
-        color: "#95A5A6",
-        label: "None",
-      },
-      low: {
-        emoji: "🟢",
-        color: "#2ECC71",
-        label: "Low",
-      },
-      medium: {
-        emoji: "🟡",
-        color: "#F1C40F",
-        label: "Medium",
-      },
-      high: {
-        emoji: "🔴",
-        color: "#E74C3C",
-        label: "High",
-      },
-      urgent: {
-        emoji: "🚨",
-        color: "#E91E63",
-        label: "Urgent",
-      },
+      none: { emoji: "⚪", color: "#95A5A6", label: "Ninguna" },
+      low: { emoji: "🟢", color: "#2ECC71", label: "Baja" },
+      medium: { emoji: "🟡", color: "#F1C40F", label: "Media" },
+      high: { emoji: "🔴", color: "#E74C3C", label: "Alta" },
+      urgent: { emoji: "🚨", color: "#E91E63", label: "Urgente" },
     },
-
-    // Default priority for new tickets.
     defaultPriority: "none",
-
-    // Category ID where closed tickets are archived.
     archiveCategory: null,
-
-    // Channel ID where ticket logs are sent.
     logChannel: null,
   },
 
   // =========================
-  // GIVEAWAY SETTINGS
+  // SORTEOS (GIVEAWAYS)
   // =========================
   giveaways: {
-    // Default giveaway duration in milliseconds.
-    // 86400000 = 24 hours.
-    defaultDuration: 86400000, 
-
-    // Allowed winner count range.
+    defaultDuration: 86400000, // 24 horas
     minimumWinners: 1,
-    maximumWinners: 10,
-
-    // Allowed giveaway duration range in milliseconds.
-    // 300000 = 5 minutes.
-    minimumDuration: 300000, 
-    // 2592000000 = 30 days.
-    maximumDuration: 2592000000, 
-
-    // Role IDs allowed to host giveaways.
+    maximumWinners: 20,
+    minimumDuration: 300000, // 5 min
+    maximumDuration: 2592000000, // 30 días
     allowedRoles: [],
-
-    // Role IDs that bypass giveaway restrictions.
     bypassRoles: [],
   },
 
   // =========================
-  // BIRTHDAY SETTINGS
-  // =========================
-  birthday: {
-    // Role ID given to users on their birthday.
-    defaultRole: null,
-
-    // Channel ID where birthday announcements are posted.
-    announcementChannel: null,
-
-    // Timezone used to calculate birthday dates.
-    timezone: "UTC",
-  },
-
-  // =========================
-  // VERIFICATION SETTINGS
+  // VERIFICACIÓN
   // =========================
   verification: {
-    // Message shown when posting the verification panel.
-    defaultMessage: "Click the button below to verify yourself and gain access to the server!",
-
-    // Text on the verification button.
-    defaultButtonText: "Verify",
-
-    // Automatic verification behavior.
+    defaultMessage: "¡Bienvenido a GhoulMC! Haz clic en el botón de abajo para verificarte y acceder al servidor.",
+    defaultButtonText: "Verificarse",
     autoVerify: {
-      // How automatic verification decides who is auto-approved:
-      // - "none"        = everyone is auto-verified immediately
-      // - "account_age" = account must be older than set days
-      // - "server_size" = auto-verify everyone only in smaller servers
       defaultCriteria: "none",
-
-      // Days used when `defaultCriteria` is `account_age`.
-      defaultAccountAgeDays: 7,
-
-      // Member count threshold used when `defaultCriteria` is `server_size`.
-      // Example: 1000 means auto-verify if server has fewer than 1000 members.
+      defaultAccountAgeDays: 3, // Seguridad: cuenta de al menos 3 días
       serverSizeThreshold: 1000,
-
-      // Allowed safety limits for account-age requirements.
-      // 1 = minimum day, 365 = maximum days.
-      minAccountAge: 1,      
-      maxAccountAge: 365,    
-
-      // If true, user receives a DM after verification.
+      minAccountAge: 0,
+      maxAccountAge: 365,
       sendDMNotification: true,
-
-      // Human-readable descriptions for each criteria mode.
       criteria: {
-        account_age: "Account must be older than specified days",
-        server_size: "All users if server has less than 1000 members",
-        none: "All users immediately"
+        account_age: "La cuenta debe tener una antigüedad mínima",
+        server_size: "Automático si el servidor es pequeño",
+        none: "Todos los usuarios inmediatamente"
       }
     },
-
-    // Minimum time between verification attempts (milliseconds).
-    // 5000 = 5 seconds.
-    verificationCooldown: 5000,  
-
-    // Maximum failed attempts allowed inside the time window below.
-    maxVerificationAttempts: 3,   
-
-    // Time window for counting attempts (milliseconds).
-    // 60000 = 1 minute.
-    attemptWindow: 60000,          
-
-    // In-memory safety limits (helps avoid unbounded memory growth).
+    verificationCooldown: 10000,
+    maxVerificationAttempts: 3,
+    attemptWindow: 60000,
     maxCooldownEntries: 10000,
     maxAttemptEntries: 10000,
-    // Cleanup frequency for cooldown/attempt maps (milliseconds).
-    // 300000 = 5 minutes.
-    cooldownCleanupInterval: 300000, 
-    // Maximum metadata payload size for audit entries (bytes).
+    cooldownCleanupInterval: 300000,
     maxAuditMetadataBytes: 4096,
-    // Maximum number of audit entries kept in memory.
     maxInMemoryAuditEntries: 1000,
-  // If true, log every verification action.
-  logAllVerifications: true,
-  // If true, preserve verification audit history.
-  keepAuditTrail: true,
+    logAllVerifications: true,
+    keepAuditTrail: true,
   },
 
   // =========================
-  // WELCOME / GOODBYE MESSAGES
+  // BIENVENIDAS / DESPEDIDAS
   // =========================
   welcome: {
-    // Welcome template posted when a user joins.
-    // Placeholders: {user}, {server}, {memberCount}
-    defaultWelcomeMessage:
-      "Welcome {user} to {server}! We now have {memberCount} members!",
-    // Goodbye template posted when a user leaves.
-    // Placeholders: {user}, {memberCount}
-    defaultGoodbyeMessage:
-      "{user} has left the server. We now have {memberCount} members.",
-    // Channel ID for welcome messages.
+    defaultWelcomeMessage: "¡Bienvenido {user} a **GhoulMC**! Ya somos {memberCount} almas en el servidor.",
+    defaultGoodbyeMessage: "{user} ha abandonado el cementerio. Ahora somos {memberCount} ghouls.",
     defaultWelcomeChannel: null,
-    // Channel ID for goodbye messages.
     defaultGoodbyeChannel: null,
   },
 
   // =========================
-  // COUNTER CHANNELS
+  // CANALES DE CONTADOR
   // =========================
   counters: {
     defaults: {
-      // Default naming/description templates for counter entries.
-      name: "{name} Counter",
-      description: "Server {name} counter",
-      // Channel type used for counters (typically "voice").
+      name: "Contador de {name}",
+      description: "Contador de servidor {name}",
       type: "voice",
-      // Channel name format. `{count}` is replaced automatically.
-      channelName: "{name}-{count}",
+      channelName: "{name}: {count}",
     },
     permissions: {
-      // Default denied permissions for the counter channel.
       deny: ["VIEW_CHANNEL"],
-      // Default allowed permissions for the counter channel.
       allow: ["VIEW_CHANNEL", "CONNECT", "SPEAK"],
     },
     messages: {
-      // Default response messages for counter actions.
-      created: "✅ Created counter **{name}**",
-      deleted: "🗑️ Deleted counter **{name}**",
-      updated: "🔄 Updated counter **{name}**",
+      created: "✅ Contador **{name}** creado correctamente.",
+      deleted: "🗑️ Contador **{name}** eliminado.",
+      updated: "🔄 Contador **{name}** actualizado.",
     },
     types: {
-      // Built-in counter types and how each count is calculated.
       members: {
-        name: "👥 Members",
-        description: "Total members in the server",
+        name: "Ghouls Totales",
+        description: "Miembros totales en el servidor",
         getCount: (guild) => guild.memberCount.toString(),
       },
       bots: {
-        name: "🤖 Bots",
-        description: "Total bot accounts in the server",
-        getCount: (guild) =>
-          guild.members.cache.filter((m) => m.user.bot).size.toString(),
+        name: "Bots",
+        description: "Bots totales",
+        getCount: (guild) => guild.members.cache.filter((m) => m.user.bot).size.toString(),
       },
       members_only: {
-        name: "👤 Humans",
-        description: "Total human members (non-bots)",
-        getCount: (guild) =>
-          guild.members.cache.filter((m) => !m.user.bot).size.toString(),
+        name: "Jugadores",
+        description: "Solo humanos",
+        getCount: (guild) => guild.members.cache.filter((m) => !m.user.bot).size.toString(),
       },
     },
   },
 
   // =========================
-  // GENERIC BOT MESSAGES
+  // MENSAJES GENÉRICOS DEL BOT
   // =========================
   messages: {
-    noPermission: "You do not have permission to use this command.",
-    cooldownActive: "Please wait {time} before using this command again.",
-    errorOccurred: "An error occurred while executing this command.",
-    missingPermissions:
-      "I am missing required permissions to perform this action.",
-    commandDisabled: "This command has been disabled.",
-    maintenanceMode: "The bot is currently in maintenance mode.",
+    noPermission: "❌ No tienes permisos para usar este comando.",
+    cooldownActive: "⏳ Por favor, espera {time} antes de volver a usar este comando.",
+    errorOccurred: "⚠️ Ha ocurrido un error interno al ejecutar este comando.",
+    missingPermissions: "🚫 No tengo los permisos necesarios para realizar esta acción.",
+    commandDisabled: "📴 Este comando ha sido desactivado temporalmente.",
+    maintenanceMode: "🛠️ El bot se encuentra actualmente en modo mantenimiento.",
   },
 
   // =========================
-  // FEATURE TOGGLES
+  // ACTIVACIÓN DE FUNCIONES
   // =========================
-  // Set any feature to `false` to disable it globally.
   features: {
-    // Core systems.
     economy: true,
     leveling: true,
     moderation: true,
     logging: true,
     welcome: true,
-
-    // Community engagement systems.
     tickets: true,
     giveaways: true,
     birthday: true,
     counter: true,
-
-    // Security and self-service systems.
     verification: true,
     reactionRoles: true,
     joinToCreate: true,
-
-    // Utility/quality-of-life modules.
     voice: true,
     search: true,
     tools: true,
@@ -468,62 +293,51 @@ export const botConfig = {
   },
 };
 
-
+/**
+ * Función para validar la configuración
+ */
 export function validateConfig(config) {
   const errors = [];
 
-  
   if (process.env.NODE_ENV !== 'production') {
-    logger.debug('Environment variables check:');
-    logger.debug('DISCORD_TOKEN exists:', !!process.env.DISCORD_TOKEN);
-    logger.debug('TOKEN exists:', !!process.env.TOKEN);
-    logger.debug('CLIENT_ID exists:', !!process.env.CLIENT_ID);
-    logger.debug('GUILD_ID exists:', !!process.env.GUILD_ID);
-    logger.debug('POSTGRES_HOST exists:', !!process.env.POSTGRES_HOST);
-    logger.debug('NODE_ENV:', process.env.NODE_ENV);
+    logger.debug('Revisión de variables de entorno:');
+    logger.debug('TOKEN existe:', !!(process.env.DISCORD_TOKEN || process.env.TOKEN));
+    logger.debug('CLIENT_ID existe:', !!process.env.CLIENT_ID);
   }
 
   if (!process.env.DISCORD_TOKEN && !process.env.TOKEN) {
-    errors.push("Bot token is required (DISCORD_TOKEN or TOKEN environment variable)");
+    errors.push("Falta el Token del Bot (DISCORD_TOKEN o TOKEN)");
   }
 
   if (!process.env.CLIENT_ID) {
-    errors.push("Client ID is required (CLIENT_ID environment variable)");
+    errors.push("Falta el Client ID (CLIENT_ID)");
   }
 
-  
   if (process.env.NODE_ENV === 'production') {
     if (!process.env.POSTGRES_HOST) {
-      errors.push("PostgreSQL host is required in production (POSTGRES_HOST environment variable)");
-    }
-    if (!process.env.POSTGRES_USER) {
-      errors.push("PostgreSQL user is required in production (POSTGRES_USER environment variable)");
-    }
-    if (!process.env.POSTGRES_PASSWORD) {
-      errors.push("PostgreSQL password is required in production (POSTGRES_PASSWORD environment variable)");
+      errors.push("PostgreSQL es obligatorio en producción.");
     }
   }
 
   return errors;
 }
 
-
 const configErrors = validateConfig(botConfig);
 if (configErrors.length > 0) {
-  logger.error("Bot configuration errors:", configErrors.join("\n"));
+  logger.error("Errores en la configuración del Bot:", configErrors.join("\n"));
   if (process.env.NODE_ENV === "production") {
     process.exit(1);
   }
 }
 
-
 export const BotConfig = botConfig;
 
+/**
+ * Helper para obtener colores en formato hexadecimal entero
+ */
 export function getColor(path, fallback = "#99AAB5") {
-  
   if (typeof path === "number") return path;
   if (typeof path === "string" && path.startsWith("#")) {
-    
     return parseInt(path.replace("#", ""), 16);
   }
   const result = path
@@ -533,7 +347,6 @@ export function getColor(path, fallback = "#99AAB5") {
       botConfig.embeds.colors,
     );
   
-  // Convert the result to integer if it's a hex string
   if (typeof result === "string" && result.startsWith("#")) {
     return parseInt(result.replace("#", ""), 16);
   }
@@ -548,7 +361,4 @@ export function getRandomColor() {
 }
 
 export default botConfig;
-
-
-
 
