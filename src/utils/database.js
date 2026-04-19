@@ -48,6 +48,7 @@ class DatabaseWrapper {
             }
         }
 
+        
         this.db = new MemoryStorage();
         this.useFallback = true;
         this.connectionType = 'memory';
@@ -138,6 +139,10 @@ class DatabaseWrapper {
     isAvailable() {
         return this.db && !this.useFallback;
     }
+
+    
+
+
 
     getStatus() {
         return {
@@ -415,6 +420,11 @@ export async function deleteBirthday(client, guildId, userId) {
     }
 }
 
+
+
+
+
+
 export function getMonthName(monthNum) {
     const months = [
         'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -423,6 +433,7 @@ export function getMonthName(monthNum) {
     const index = Math.max(0, Math.min(monthNum - 1, 11));
     return monthNum >= 1 && monthNum <= 12 ? months[index] : 'Mes inválido';
 }
+
 
 /**
  * Obtiene todos los sorteos de un servidor
@@ -694,13 +705,30 @@ export async function incrementTicketCounter(guildId) {
     return nextCounter.toString().padStart(3, '0');
 }
 
+
+
+
+
+
+
 export function getEconomyKey(guildId, userId) {
     return `guild:${guildId}:economy:${userId}`;
 }
 
+
+
+
+
+
+
 export function getAFKKey(guildId, userId) {
     return `guild:${guildId}:afk:${userId}`;
 }
+
+
+
+
+
 
 export function getWelcomeConfigKey(guildId) {
     return `guild:${guildId}:welcome`;
@@ -754,6 +782,12 @@ function normalizeWelcomeConfig(raw = {}) {
     };
 }
 
+
+
+
+
+
+
 export async function getWelcomeConfig(client, guildId) {
     if (!client.db) {
         logger.warn('Base de datos no disponible para getWelcomeConfig');
@@ -771,6 +805,13 @@ export async function getWelcomeConfig(client, guildId) {
     }
 }
 
+
+
+
+
+
+
+
 export async function saveWelcomeConfig(client, guildId, config) {
     const key = getWelcomeConfigKey(guildId);
     try {
@@ -785,6 +826,13 @@ export async function saveWelcomeConfig(client, guildId, config) {
     }
 }
 
+
+
+
+
+
+
+
 export async function updateWelcomeConfig(client, guildId, updates) {
     try {
         const currentConfig = await getWelcomeConfig(client, guildId);
@@ -798,13 +846,31 @@ export async function updateWelcomeConfig(client, guildId, updates) {
     }
 }
 
+
+
+
+
+
+
 export function getLevelingKey(guildId) {
     return `guild:${guildId}:leveling:config`;
 }
 
+
+
+
+
+
+
 export function getUserLevelKey(guildId, userId) {
     return `guild:${guildId}:leveling:users:${userId}`;
 }
+
+
+
+
+
+
 
 export async function getLevelingConfig(client, guildId) {
     const key = getLevelingKey(guildId);
@@ -838,6 +904,13 @@ export async function getLevelingConfig(client, guildId) {
     }
 }
 
+
+
+
+
+
+
+
 export async function saveLevelingConfig(client, guildId, config) {
     const key = getLevelingKey(guildId);
     try {
@@ -848,6 +921,13 @@ export async function saveLevelingConfig(client, guildId, config) {
         return false;
     }
 }
+
+
+
+
+
+
+
 
 export async function getUserLevelData(client, guildId, userId) {
     const key = getUserLevelKey(guildId, userId);
@@ -887,6 +967,14 @@ export async function getUserLevelData(client, guildId, userId) {
     }
 }
 
+
+
+
+
+
+
+
+
 export async function saveUserLevelData(client, guildId, userId, data) {
     const key = getUserLevelKey(guildId, userId);
     try {
@@ -908,9 +996,21 @@ export async function saveUserLevelData(client, guildId, userId, data) {
     }
 }
 
+
+
+
+
+
 export function getXpForLevel(level) {
     return 5 * Math.pow(level, 2) + 50 * level + 50;
 }
+
+
+
+
+
+
+
 
 export async function getLeaderboard(client, guildId, limit = 10) {
     try {
@@ -946,7 +1046,7 @@ export async function getLeaderboard(client, guildId, limit = 10) {
                     xp: unwrapped.xp || 0,
                     level: unwrapped.level || 0,
                     totalXp: unwrapped.totalXp || 0,
-                    rank: 0
+rank: 0
                 };
             } catch (error) {
                 logger.error(`Error al procesar la clave del marcador ${key}:`, error);
@@ -970,9 +1070,21 @@ export async function getLeaderboard(client, guildId, limit = 10) {
     }
 }
 
+
+
+
+
+
+
 export function getApplicationRolesKey(guildId) {
     return `guild:${guildId}:applications:roles`;
 }
+
+
+
+
+
+
 
 export async function getApplicationRoles(client, guildId) {
     try {
@@ -991,6 +1103,13 @@ export async function getApplicationRoles(client, guildId) {
     }
 }
 
+
+
+
+
+
+
+
 export async function saveApplicationRoles(client, guildId, roles) {
     try {
         if (!client.db || typeof client.db.set !== "function") {
@@ -1007,17 +1126,40 @@ export async function saveApplicationRoles(client, guildId, roles) {
     }
 }
 
+
+
+
+
+
 export function getApplicationSettingsKey(guildId) {
     return `guild:${guildId}:applications:settings`;
 }
+
+
+
+
+
+
 
 export function getUserApplicationsKey(guildId, userId) {
     return `guild:${guildId}:applications:users:${userId}`;
 }
 
+
+
+
+
+
+
 export function getApplicationKey(guildId, applicationId) {
     return `guild:${guildId}:applications:${applicationId}`;
 }
+
+
+
+
+
+
 
 export async function getApplicationSettings(client, guildId) {
     if (!client.db) {
@@ -1044,9 +1186,9 @@ export async function getApplicationSettings(client, guildId) {
             applicationChannelId: null,
             logChannelId: null,
             questions: [
-                "¿Por qué quieres unirte a nuestro equipo de staff?",
-                "¿Qué experiencia tienes que te haría un buen candidato?",
-                "¿Cuánto tiempo puedes dedicar a este rol?"
+                "Why do you want to join our staff team?",
+                "What experience do you have that would make you a good fit?",
+                "How much time can you dedicate to this role?"
             ],
             roles: {
                 admin: null,
@@ -1056,9 +1198,9 @@ export async function getApplicationSettings(client, guildId) {
             },
             requiredRoles: [],
             deniedRoles: [],
-            minAccountAge: 0,
+minAccountAge: 0,
             maxApplications: 1,
-            cooldown: 7,
+cooldown: 7,
             allowMultipleApplications: false,
             requireVerification: false,
             customWelcomeMessage: "",
@@ -1074,9 +1216,9 @@ export async function getApplicationSettings(client, guildId) {
             applicationChannelId: null,
             logChannelId: null,
             questions: [
-                "¿Por qué quieres unirte a nuestro equipo de staff?",
-                "¿Qué experiencia tienes que te haría un buen candidato?",
-                "¿Cuánto tiempo puedes dedicar a este rol?"
+                "Why do you want to join our staff team?",
+                "What experience do you have that would make you a good fit?",
+                "How much time can you dedicate to this role?"
             ],
             roles: {
                 admin: null,
@@ -1205,6 +1347,13 @@ export async function cleanupExpiredApplications(client, guildId) {
     }
 }
 
+
+
+
+
+
+
+
 export async function saveApplicationSettings(client, guildId, settings) {
     const key = getApplicationSettingsKey(guildId);
     try {
@@ -1272,6 +1421,12 @@ export async function deleteApplicationRoleSettings(client, guildId, roleId) {
     }
 }
 
+
+
+
+
+
+
 export async function createApplication(client, application) {
     const { guildId, userId } = application;
     const applicationId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -1280,7 +1435,7 @@ export async function createApplication(client, application) {
     const newApplication = {
         ...application,
         id: applicationId,
-        status: 'pending',
+status: 'pending',
         createdAt: Date.now(),
         updatedAt: Date.now(),
         reviewedBy: null,
@@ -1315,6 +1470,13 @@ export async function createApplication(client, application) {
     }
 }
 
+
+
+
+
+
+
+
 export async function getApplication(client, guildId, applicationId) {
     const key = getApplicationKey(guildId, applicationId);
     try {
@@ -1326,6 +1488,14 @@ export async function getApplication(client, guildId, applicationId) {
         return null;
     }
 }
+
+
+
+
+
+
+
+
 
 export async function updateApplication(client, guildId, applicationId, updates) {
     const key = getApplicationKey(guildId, applicationId);
@@ -1348,6 +1518,13 @@ export async function updateApplication(client, guildId, applicationId, updates)
         throw error;
     }
 }
+
+
+
+
+
+
+
 
 export async function getUserApplications(client, guildId, userId) {
     const userKey = getUserApplicationsKey(guildId, userId);
@@ -1375,6 +1552,17 @@ export async function getUserApplications(client, guildId, userId) {
         return [];
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 export async function getApplications(client, guildId, filters = {}) {
     const {
@@ -1429,17 +1617,41 @@ export async function getApplications(client, guildId, filters = {}) {
     }
 }
 
+
+
+
+
+
+
 export function getModlogSettingsKey(guildId) {
     return `guild:${guildId}:modlog:settings`;
 }
+
+
+
+
+
+
 
 export function getModlogEntryKey(guildId, caseId) {
     return `guild:${guildId}:modlog:cases:${caseId}`;
 }
 
+
+
+
+
+
+
 export function getUserModlogKey(guildId, userId) {
     return `guild:${guildId}:modlog:users:${userId}`;
 }
+
+
+
+
+
+
 
 export async function getModlogSettings(client, guildId) {
     const key = getModlogSettingsKey(guildId);
@@ -1486,6 +1698,7 @@ export async function getModlogSettings(client, guildId) {
             logGuildUpdates: true,
             logEmojiRoleUpdates: true,
             logStickerRoleUpdates: true,
+            logStickerUpdates: true,
             logIntegrationRoleUpdates: true,
             logWebhookRoleUpdates: true,
             logAutoModRuleUpdates: true,
@@ -1512,6 +1725,27 @@ export async function getModlogSettings(client, guildId) {
             logGuildScheduledEventCreate: true,
             logGuildScheduledEventDelete: true,
             logGuildScheduledEventUpdate: true,
+            logGuildScheduledEventUserAdds: true,
+            logGuildScheduledEventUserRemoves: true,
+            logGuildScheduledEventUserUpdates: true,
+            logGuildScheduledEventUsersAdd: true,
+            logGuildScheduledEventUsersRemove: true,
+            logGuildScheduledEventUsersUpdate: true,
+            logGuildScheduledEventUserAdd: true,
+            logGuildScheduledEventUserRemove: true,
+            logGuildScheduledEventUserUpdate: true,
+            logGuildScheduledEventUsersAdd: true,
+            logGuildScheduledEventUsersRemove: true,
+            logGuildScheduledEventUsersUpdate: true,
+            logGuildScheduledEventUserAdd: true,
+            logGuildScheduledEventUserRemove: true,
+            logGuildScheduledEventUserUpdate: true,
+            logGuildScheduledEventUsersAdd: true,
+            logGuildScheduledEventUsersRemove: true,
+            logGuildScheduledEventUsersUpdate: true,
+            logGuildScheduledEventUserAdd: true,
+            logGuildScheduledEventUserRemove: true,
+            logGuildScheduledEventUserUpdate: true,
             logGuildScheduledEventUsersAdd: true,
             logGuildScheduledEventUsersRemove: true,
             logGuildScheduledEventUsersUpdate: true
@@ -1554,6 +1788,13 @@ export async function getModlogSettings(client, guildId) {
     }
 }
 
+
+
+
+
+
+
+
 export async function saveModlogSettings(client, guildId, settings) {
     const key = getModlogSettingsKey(guildId);
     try {
@@ -1567,6 +1808,12 @@ export async function saveModlogSettings(client, guildId, settings) {
         return false;
     }
 }
+
+
+
+
+
+
 
 export async function createModlogEntry(client, entry) {
     const { guildId, userId } = entry;
@@ -1598,6 +1845,13 @@ export async function createModlogEntry(client, entry) {
     }
 }
 
+
+
+
+
+
+
+
 export async function getModlogEntry(client, guildId, caseId) {
     const key = getModlogEntryKey(guildId, caseId);
     try {
@@ -1608,6 +1862,14 @@ export async function getModlogEntry(client, guildId, caseId) {
         return null;
     }
 }
+
+
+
+
+
+
+
+
 
 export async function updateModlogEntry(client, guildId, caseId, updates) {
     const key = getModlogEntryKey(guildId, caseId);
@@ -1631,6 +1893,13 @@ export async function updateModlogEntry(client, guildId, caseId, updates) {
     }
 }
 
+
+
+
+
+
+
+
 export async function getUserModlogEntries(client, guildId, userId) {
     const userKey = getUserModlogKey(guildId, userId);
     try {
@@ -1646,6 +1915,18 @@ export async function getUserModlogEntries(client, guildId, userId) {
         return [];
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 export async function getModlogEntries(client, guildId, filters = {}) {
     const {
@@ -1686,13 +1967,30 @@ export async function getModlogEntries(client, guildId, filters = {}) {
     }
 }
 
+
+
+
+
+
+
 export function getJoinToCreateConfigKey(guildId) {
     return `guild:${guildId}:jointocreate`;
 }
 
+
+
+
+
+
 export function getJoinToCreateChannelsKey(guildId) {
     return `guild:${guildId}:jointocreate:channels`;
 }
+
+
+
+
+
+
 
 export async function getJoinToCreateConfig(client, guildId) {
     if (!client.db) {
@@ -1729,13 +2027,20 @@ export async function getJoinToCreateConfig(client, guildId) {
             enabled: false,
             triggerChannels: [],
             categoryId: null,
-            channelNameTemplate: "Sala de {username}",
+            channelNameTemplate: "{username}'s Room",
             userLimit: 0,
             bitrate: 64000,
             temporaryChannels: {}
         };
     }
 }
+
+
+
+
+
+
+
 
 export async function saveJoinToCreateConfig(client, guildId, config) {
     const key = getJoinToCreateConfigKey(guildId);
@@ -1751,6 +2056,13 @@ export async function saveJoinToCreateConfig(client, guildId, config) {
     }
 }
 
+
+
+
+
+
+
+
 export async function updateJoinToCreateConfig(client, guildId, updates) {
     try {
         const currentConfig = await getJoinToCreateConfig(client, guildId);
@@ -1763,6 +2075,14 @@ export async function updateJoinToCreateConfig(client, guildId, updates) {
         throw error;
     }
 }
+
+
+
+
+
+
+
+
 
 export async function addJoinToCreateTrigger(client, guildId, channelId, options = {}) {
     try {
@@ -1793,6 +2113,13 @@ export async function addJoinToCreateTrigger(client, guildId, channelId, options
     }
 }
 
+
+
+
+
+
+
+
 export async function removeJoinToCreateTrigger(client, guildId, channelId) {
     try {
         const config = await getJoinToCreateConfig(client, guildId);
@@ -1816,6 +2143,15 @@ export async function removeJoinToCreateTrigger(client, guildId, channelId) {
     }
 }
 
+
+
+
+
+
+
+
+
+
 export async function registerTemporaryChannel(client, guildId, channelId, ownerId, triggerChannelId) {
     try {
         const config = await getJoinToCreateConfig(client, guildId);
@@ -1833,6 +2169,13 @@ export async function registerTemporaryChannel(client, guildId, channelId, owner
     }
 }
 
+
+
+
+
+
+
+
 export async function unregisterTemporaryChannel(client, guildId, channelId) {
     try {
         const config = await getJoinToCreateConfig(client, guildId);
@@ -1849,6 +2192,13 @@ export async function unregisterTemporaryChannel(client, guildId, channelId) {
     }
 }
 
+
+
+
+
+
+
+
 export async function getTemporaryChannelInfo(client, guildId, channelId) {
     try {
         const config = await getJoinToCreateConfig(client, guildId);
@@ -1858,6 +2208,12 @@ export async function getTemporaryChannelInfo(client, guildId, channelId) {
         return null;
     }
 }
+
+
+
+
+
+
 
 export function formatChannelName(template, variables) {
     let formatted = template;
@@ -1875,11 +2231,18 @@ export function formatChannelName(template, variables) {
     }
     
     formatted = formatted.replace(/[^\w\s-]/g, '').trim();
-    formatted = formatted.substring(0, 100);
+formatted = formatted.substring(0, 100);
     
     return formatted || 'Canal de Voz';
 }
 
+
+
+
+
 function generateCaseId() {
     return `${Date.now().toString(36)}-${Math.random().toString(36).substr(2, 4)}`;
 }
+
+
+
