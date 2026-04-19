@@ -21,7 +21,7 @@ export default {
 
       await handleLeveling(message, client);
     } catch (error) {
-      logger.error('Error in messageCreate event:', error);
+      logger.error('Error en el evento messageCreate:', error);
     }
   }
 };
@@ -33,6 +33,7 @@ export default {
 
 
 
+// Sistema de XP y niveles de GhoulMC
 async function handleLeveling(message, client) {
   try {
     const rateLimitKey = `xp-event:${message.guild.id}:${message.author.id}`;
@@ -110,7 +111,7 @@ async function handleLeveling(message, client) {
       );
     }
   } catch (error) {
-    logger.error('Error handling leveling for message:', error);
+    logger.error('Error al gestionar el sistema de niveles para el mensaje:', error);
   }
 }
 

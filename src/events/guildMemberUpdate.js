@@ -14,7 +14,7 @@ export default {
 
       
       fields.push({
-        name: '👤 Member',
+        name: '👤 Miembro',
         value: `${newMember.user.tag} (${newMember.user.id})`,
         inline: true
       });
@@ -22,14 +22,14 @@ export default {
       
       if (oldMember.nickname !== newMember.nickname) {
         fields.push({
-          name: '🏷️ Old Nickname',
-          value: oldMember.nickname || '*(no nickname)*',
+          name: '🏷️ Apodo Anterior',
+          value: oldMember.nickname || '*(sin apodo)*',
           inline: true
         });
 
         fields.push({
-          name: '🏷️ New Nickname',
-          value: newMember.nickname || '*(no nickname)*',
+          name: '🏷️ Apodo Nuevo',
+          value: newMember.nickname || '*(sin apodo)*',
           inline: true
         });
 
@@ -38,7 +38,7 @@ export default {
           guildId: newMember.guild.id,
           eventType: EVENT_TYPES.MEMBER_NAME_CHANGE,
           data: {
-            description: `Member nickname changed: ${newMember.user.tag}`,
+            description: `Apodo de miembro cambiado: ${newMember.user.tag}`,
             userId: newMember.user.id,
             fields
           }
@@ -48,7 +48,7 @@ export default {
       }
 
     } catch (error) {
-      logger.error('Error in guildMemberUpdate event:', error);
+      logger.error('Error en el evento guildMemberUpdate:', error);
     }
   }
 };

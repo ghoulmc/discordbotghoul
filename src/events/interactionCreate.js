@@ -33,7 +33,7 @@ export default {
 
         if (interaction.isChatInputCommand()) {
           try {
-            logger.info(`Command executed: /${interaction.commandName} by ${interaction.user.tag}`, {
+            logger.info(`Comando ejecutado: /${interaction.commandName} por ${interaction.user.tag}`, {
               event: 'interaction.command.received',
               traceId: interactionTraceContext.traceId,
               guildId: interaction.guildId,
@@ -50,9 +50,9 @@ export default {
 
             if (!command) {
               throw createError(
-                `No command matching ${interaction.commandName} was found.`,
+                `No se encontró ningún comando que coincida con ${interaction.commandName}.`,
                 ErrorTypes.CONFIGURATION,
-                'Sorry, that command does not exist.',
+                'Lo sentimos, ese comando no existe.',
                 withTraceContext({ commandName: interaction.commandName }, interactionTraceContext)
               );
             }
@@ -61,9 +61,9 @@ export default {
             if (!abuseProtection.allowed) {
               const formattedCooldown = formatCooldownDuration(abuseProtection.remainingMs);
               throw createError(
-                `Risky command cooldown active for ${interaction.commandName}`,
+                `Cooldown de comando activo para ${interaction.commandName}`,
                 ErrorTypes.RATE_LIMIT,
-                `This command is on cooldown. Please wait ${formattedCooldown} before trying again.`,
+                `Este comando está en espera. Por favor espera ${formattedCooldown} antes de volver a intentarlo.`,
                 withTraceContext({
                   commandName: interaction.commandName,
                   subtype: 'command_cooldown',
@@ -80,9 +80,9 @@ export default {
               guildConfig = await getGuildConfig(client, interaction.guild.id, interactionTraceContext);
               if (guildConfig?.disabledCommands?.[interaction.commandName]) {
                 throw createError(
-                  `Command ${interaction.commandName} is disabled in this guild`,
+                  `El comando ${interaction.commandName} está desactivado en este servidor`,
                   ErrorTypes.CONFIGURATION,
-                  'This command has been disabled for this server.',
+                  'Este comando ha sido desactivado para este servidor.',
                   withTraceContext({ commandName: interaction.commandName, guildId: interaction.guild.id }, interactionTraceContext)
                 );
               }
@@ -105,7 +105,7 @@ export default {
               const roles = await getApplicationRoles(client, interaction.guildId);
               const roleName = interaction.options.getString('application', false);
               
-              // Filter: only show enabled applications
+              // Filtro: solo mostrar solicitudes habilitadas
               const filtered = roles.filter(role =>
                 role.enabled !== false && 
                 role.name.toLowerCase().startsWith(roleName?.toLowerCase() || '')
@@ -113,12 +113,12 @@ export default {
               
               await interaction.respond(
                 filtered.slice(0, 25).map(role => ({
-                  name: `${role.name}${role.enabled === false ? ' (disabled)' : ''}`,
+                  name: `${role.name}${role.enabled === false ? ' (desactivado)' : ''}`,
                   value: role.name
                 }))
               );
             } catch (error) {
-              logger.error('Error handling autocomplete:', {
+              logger.error('Error al gestionar el autocompletado:', {
                 error: error.message,
                 guildId: interaction.guildId,
                 commandName: interaction.commandName
@@ -131,19 +131,19 @@ export default {
               const roles = await getApplicationRoles(client, interaction.guildId);
               const appName = interaction.options.getString('application', false);
               
-              // Show all applications (enabled and disabled), but mark disabled ones
+              // Mostrar todas las solicitudes (habilitadas y deshabilitadas), marcando las desactivadas
               const filtered = roles.filter(role =>
                 role.name.toLowerCase().startsWith(appName?.toLowerCase() || '')
               );
               
               await interaction.respond(
                 filtered.slice(0, 25).map(role => ({
-                  name: `${role.name}${role.enabled === false ? ' (disabled)' : ''}`,
+                  name: `${role.name}${role.enabled === false ? ' (desactivado)' : ''}`,
                   value: role.name
                 }))
               );
             } catch (error) {
-              logger.error('Error handling app-admin autocomplete:', {
+              logger.error('Error al gestionar el autocompletado de app-admin:', {
                 error: error.message,
                 guildId: interaction.guildId,
                 commandName: interaction.commandName
@@ -163,7 +163,7 @@ export default {
                 return;
               }
               
-              // Filter out panels whose messages no longer exist
+              // Filtrar paneles cuyo mensaje ya no existe
               const validPanels = [];
               for (const panel of panels) {
                 if (!panel.messageId || !panel.channelId) {
@@ -198,7 +198,7 @@ export default {
                     const msg = await channel.messages.fetch(panel.messageId).catch(() => null);
                     if (!msg) return null;
                     
-                    const title = msg?.embeds?.[0]?.title ?? 'Untitled Panel';
+                    const title = msg?.embeds?.[0]?.title ?? 'Panel sin título';
                     const channelName = channel?.name ?? 'unknown';
                     
                     return {
@@ -214,7 +214,7 @@ export default {
               const validChoices = choices.filter(c => c !== null);
               await interaction.respond(validChoices);
             } catch (error) {
-              logger.error('Error handling reactroles autocomplete:', {
+              logger.error('Error al gestionar el autocompletado de reactroles:', {
                 error: error.message,
                 guildId: interaction.guildId,
                 commandName: interaction.commandName
@@ -241,9 +241,9 @@ export default {
               }
             } else {
               throw createError(
-                `No button handler found for ${buttonType}`,
+                `No se encontró el manejador del botón ${buttonType}`,
                 ErrorTypes.CONFIGURATION,
-                'This button is not available.',
+                'Este botón no está disponible.',
                 withTraceContext({ buttonType }, interactionTraceContext)
               );
             }
@@ -259,9 +259,9 @@ export default {
             }
 
             throw createError(
-              `No button handler found for ${customId}`,
+              `No se encontró el manejador del botón ${customId}`,
               ErrorTypes.CONFIGURATION,
-              'This button is not available.',
+              'Este botón no está disponible.',
               withTraceContext({ customId }, interactionTraceContext)
             );
           }
@@ -281,16 +281,16 @@ export default {
 
           if (!selectMenu) {
             if (!interaction.customId.includes(':')) {
-              // No registered handler and no ':' delimiter — this is an inline-collected
-              // select menu (e.g. ticket_config_<guildId>, jointocreate_config_<id>).
-              // Return silently so the existing MessageComponentCollector handles it.
+              // Sin manejador registrado y sin delimitador ':' — es un menú desplegable
+              // recogido inline (ej: ticket_config_<guildId>, jointocreate_config_<id>).
+              // Se ignora silenciosamente para que el MessageComponentCollector lo gestione.
               return;
             }
 
             throw createError(
-              `No select menu handler found for ${customId}`,
+              `No se encontró el manejador del menú desplegable ${customId}`,
               ErrorTypes.CONFIGURATION,
-              'This select menu is not available.',
+              'Este menú desplegable no está disponible.',
               withTraceContext({ customId }, interactionTraceContext)
             );
           }
@@ -331,7 +331,7 @@ export default {
           }
 
           if (interaction.customId.startsWith('jtc_')) {
-            logger.debug(`Skipping modal handler lookup for inline-awaited modal: ${interaction.customId}`, {
+            logger.debug(`Ignorando búsqueda de manejador para modal esperado inline: ${interaction.customId}`, {
               event: 'interaction.modal.inline_skipped',
               traceId: interactionTraceContext.traceId
             });
@@ -343,15 +343,15 @@ export default {
 
           if (!modal) {
             if (!interaction.customId.includes(':')) {
-              // No registered handler and no ':' delimiter — this is an inline-awaited
-              // modal (e.g. via awaitModalSubmit). Return silently so the caller handles it.
+              // Sin manejador registrado y sin delimitador ':' — es un modal esperado inline
+              // (ej: via awaitModalSubmit). Se ignora silenciosamente para que el invocador lo gestione.
               return;
             }
 
             throw createError(
-              `No modal handler found for ${customId}`,
+              `No se encontró el manejador del modal ${customId}`,
               ErrorTypes.CONFIGURATION,
-              'This form is not available.',
+              'Este formulario no está disponible.',
               withTraceContext({ customId }, interactionTraceContext)
             );
           }
@@ -367,7 +367,7 @@ export default {
           }
         }
       } catch (error) {
-        logger.error('Unhandled error in interactionCreate:', {
+        logger.error('Error no manejado en interactionCreate:', {
           event: 'interaction.unhandled_error',
           errorCode: 'INTERACTION_UNHANDLED_ERROR',
           error,
@@ -379,11 +379,11 @@ export default {
 
         try {
           const ephemeralErrorMessage = {
-            embeds: [MessageTemplates.ERRORS.DATABASE_ERROR('processing your interaction')],
+            embeds: [MessageTemplates.ERRORS.DATABASE_ERROR('procesar tu interacción')],
             flags: MessageFlags.Ephemeral
           };
           const editErrorMessage = {
-            embeds: [MessageTemplates.ERRORS.DATABASE_ERROR('processing your interaction')]
+            embeds: [MessageTemplates.ERRORS.DATABASE_ERROR('procesar tu interacción')]
           };
 
           if (interaction.deferred) {
@@ -394,7 +394,7 @@ export default {
             await interaction.reply(ephemeralErrorMessage);
           }
         } catch (replyError) {
-          logger.error('Failed to send fallback error response:', {
+          logger.error('No se pudo enviar la respuesta de error de respaldo:', {
             event: 'interaction.error_response_failed',
             errorCode: 'INTERACTION_ERROR_RESPONSE_FAILED',
             error: replyError,

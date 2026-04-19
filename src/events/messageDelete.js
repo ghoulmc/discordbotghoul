@@ -17,7 +17,7 @@ export default {
         const reactionRoleData = await getReactionRoleMessage(message.client, message.guild.id, message.id);
         if (reactionRoleData) {
           await deleteReactionRoleMessage(message.client, message.guild.id, message.id);
-          logger.info(`Cleaned up reaction role database entry for manually deleted message ${message.id} in guild ${message.guild.id}`);
+          logger.info(`Entrada de rol por reacción limpiada para el mensaje eliminado manualmente ${message.id} en el servidor ${message.guild.id}`);
 
           try {
             await logEvent({
@@ -29,29 +29,29 @@ export default {
                 channelId: message.channel?.id,
                 fields: [
                   {
-                    name: '🗑️ Message ID',
+                    name: '🗑️ ID del Mensaje',
                     value: message.id,
                     inline: true
                   },
                   {
-                    name: '📍 Channel',
-                    value: message.channel ? `${message.channel.toString()} (${message.channel.id})` : 'Unknown',
+                    name: '📍 Canal',
+                    value: message.channel ? `${message.channel.toString()} (${message.channel.id})` : 'Desconocido',
                     inline: true
                   },
                   {
-                    name: '🧹 Cleanup',
-                    value: 'Database entry removed automatically',
+                    name: '🧹 Limpieza',
+                    value: 'Entrada de la base de datos eliminada automáticamente',
                     inline: false
                   }
                 ]
               }
             });
           } catch (logCleanupError) {
-            logger.warn('Failed to log reaction role cleanup after manual message deletion:', logCleanupError);
+            logger.warn('Error al registrar la limpieza del rol por reacción tras la eliminación manual del mensaje:', logCleanupError);
           }
         }
       } catch (reactionRoleCleanupError) {
-        logger.warn(`Failed to clean up reaction role data for deleted message ${message.id}:`, reactionRoleCleanupError);
+        logger.warn(`Error al limpiar los datos de rol por reacción del mensaje eliminado ${message.id}:`, reactionRoleCleanupError);
       }
 
       if (message.author?.bot) return;
@@ -61,7 +61,7 @@ export default {
       
       if (message.author) {
         fields.push({
-          name: '👤 Author',
+          name: '👤 Autor',
           value: `${message.author.tag} (${message.author.id})`,
           inline: true
         });
@@ -69,7 +69,7 @@ export default {
 
       
       fields.push({
-        name: '💬 Channel',
+        name: '💬 Canal',
         value: `${message.channel.toString()} (${message.channel.id})`,
         inline: true
       });
@@ -80,22 +80,22 @@ export default {
           ? message.content.substring(0, MAX_LOGGED_MESSAGE_CONTENT_LENGTH - 3) + '...' 
           : message.content;
         fields.push({
-          name: '📝 Content',
-          value: content || '*(empty message)*',
+          name: '📝 Contenido',
+          value: content || '*(mensaje vacío)*',
           inline: false
         });
       }
 
       
       fields.push({
-        name: '🆔 Message ID',
+        name: '🆔 ID del Mensaje',
         value: message.id,
         inline: true
       });
 
       
       fields.push({
-        name: '📅 Created',
+        name: '📅 Creado',
         value: `<t:${Math.floor(message.createdTimestamp / 1000)}:R>`,
         inline: true
       });
@@ -103,7 +103,7 @@ export default {
       
       if (message.attachments.size > 0) {
         fields.push({
-          name: '📎 Attachments',
+          name: '📎 Archivos adjuntos',
           value: message.attachments.size.toString(),
           inline: true
         });
@@ -114,7 +114,7 @@ export default {
         guildId: message.guild.id,
         eventType: EVENT_TYPES.MESSAGE_DELETE,
         data: {
-          description: `A message was deleted in ${message.channel.toString()}`,
+          description: `Se eliminó un mensaje en ${message.channel.toString()}`,
           userId: message.author?.id,
           channelId: message.channel.id,
           fields
@@ -122,7 +122,7 @@ export default {
       });
 
     } catch (error) {
-      logger.error('Error in messageDelete event:', error);
+      logger.error('Error en el evento messageDelete:', error);
     }
   }
 };

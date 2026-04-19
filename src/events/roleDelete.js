@@ -18,13 +18,13 @@ export default {
         guildId: role.guild.id,
         eventType: EVENT_TYPES.ROLE_DELETE,
         data: {
-          description: `A role was deleted: ${role.name}`,
+          description: `Se ha eliminado el rol: ${role.name}`,
           fields
         }
       });
 
     } catch (error) {
-      logger.error('Error in roleDelete event:', error);
+      logger.error('Error en el evento roleDelete:', error);
     }
   }
 };

@@ -15,7 +15,7 @@ const DEFAULT_VOICE_BITRATE = 64000;
 const MAX_VOICE_BITRATE = 384000;
 const MIN_VOICE_BITRATE = 8000;
 const MAX_CHANNEL_NAME_LENGTH = 100;
-const FALLBACK_CHANNEL_NAME = 'Voice Room';
+const FALLBACK_CHANNEL_NAME = 'Sala de Voz';
 const MAX_TRACKED_COOLDOWNS = 10000;
 
 export default {
@@ -48,7 +48,7 @@ export default {
             }
 
         } catch (error) {
-            logger.error(`Error in voiceStateUpdate for guild ${guildId}:`, error);
+            logger.error(`Error en voiceStateUpdate para el servidor ${guildId}:`, error);
         }
 
         async function handleVoiceJoin(client, state, config) {
@@ -62,7 +62,7 @@ export default {
             if (channelCreationCooldown.has(cooldownKey)) {
                 const lastCreation = channelCreationCooldown.get(cooldownKey);
 if (now - lastCreation < VOICE_CREATE_COOLDOWN_MS) {
-                    logger.warn(`User ${member.id} is on cooldown for channel creation`);
+                    logger.warn(`El usuario ${member.id} está en cooldown para crear canales`);
                     return;
                 }
             }
@@ -81,7 +81,7 @@ if (now - lastCreation < VOICE_CREATE_COOLDOWN_MS) {
                         await member.voice.setChannel(tempChannel);
                         return;
                     } catch (error) {
-                        logger.warn(`Failed to move user ${member.id} to existing channel ${existingTempChannel}:`, error);
+                        logger.warn(`Error al mover al usuario ${member.id} al canal existente ${existingTempChannel}:`, error);
                     }
                 }
             }
@@ -143,14 +143,14 @@ if (now - lastCreation < VOICE_CREATE_COOLDOWN_MS) {
             try {
                 const me = guild.members.me;
                 if (!me) {
-                    logger.warn(`Bot member cache unavailable while creating temporary channel in guild ${guild.id}`);
+                    logger.warn(`Caché del bot no disponible al crear canal temporal en el servidor ${guild.id}`);
                     channelCreationCooldown.delete(cooldownKey);
                     return;
                 }
 
                 const triggerPermissions = triggerChannel.permissionsFor(me);
                 if (!triggerPermissions?.has([PermissionFlagsBits.ManageChannels, PermissionFlagsBits.MoveMembers, PermissionFlagsBits.Connect])) {
-                    logger.warn(`Missing required permissions for temporary channel creation in guild ${guild.id} (trigger channel ${triggerChannel.id})`);
+                    logger.warn(`Permisos insuficientes para crear canal temporal en el servidor ${guild.id} (canal disparador ${triggerChannel.id})`);
                     channelCreationCooldown.delete(cooldownKey);
                     return;
                 }
@@ -163,7 +163,7 @@ if (now - lastCreation < VOICE_CREATE_COOLDOWN_MS) {
 
                 userLimit = Math.max(0, Math.min(99, userLimit || 0));
 
-                logger.info(`Creating temporary channel for user ${member.id} with user limit: ${userLimit}`);
+                logger.info(`Creando canal temporal para el usuario ${member.id} con límite de usuarios: ${userLimit}`);
 
                 const channelName = sanitizeVoiceChannelName(formatChannelName(nameTemplate, {
                     username: member.user.username,
@@ -174,7 +174,7 @@ if (now - lastCreation < VOICE_CREATE_COOLDOWN_MS) {
                 }));
 
                 if (!member.voice?.channel || member.voice.channel.id !== triggerChannel.id) {
-                    logger.debug(`Member ${member.id} no longer in trigger channel ${triggerChannel.id}, aborting temporary channel creation`);
+                    logger.debug(`El miembro ${member.id} ya no está en el canal disparador ${triggerChannel.id}, cancelando creación del canal temporal`);
                     channelCreationCooldown.delete(cooldownKey);
                     return;
                 }
@@ -202,22 +202,22 @@ userLimit: userLimit === 0 ? undefined : userLimit,
                 if (member.voice?.channel?.id === triggerChannel.id) {
                     await member.voice.setChannel(tempChannel);
                 } else {
-                    logger.debug(`Skipped moving ${member.id} to temporary channel ${tempChannel.id} because voice state changed`);
+                    logger.debug(`Se omitió mover a ${member.id} al canal temporal ${tempChannel.id} porque el estado de voz cambió`);
                 }
 
-                logger.info(`Created temporary voice channel ${tempChannel.name} (${tempChannel.id}) for user ${member.user.tag} in guild ${guild.name} with user limit ${userLimit}`);
+                logger.info(`Canal de voz temporal ${tempChannel.name} (${tempChannel.id}) creado para ${member.user.tag} en ${guild.name} con límite de ${userLimit} usuarios`);
 
             } catch (error) {
-                logger.error(`Failed to create temporary channel for user ${member.user.tag} in guild ${guild.name}:`, error);
+                logger.error(`Error al crear canal temporal para ${member.user.tag} en ${guild.name}:`, error);
                 
                 channelCreationCooldown.delete(cooldownKey);
                 
                 try {
                     await member.send({
-                        content: `❌ Failed to create your temporary voice channel. Please contact a server administrator.`
+                        content: `❌ No se pudo crear tu canal de voz temporal. Contacta con un administrador del servidor GhoulMC.`
                     });
                 } catch (dmError) {
-                    logger.debug(`Unable to send temporary channel failure DM to user ${member.id}:`, dmError);
+                    logger.debug(`No se pudo enviar DM de fallo de canal temporal al usuario ${member.id}:`, dmError);
                 }
             }
         }
@@ -226,12 +226,12 @@ userLimit: userLimit === 0 ? undefined : userLimit,
             try {
                 await unregisterTemporaryChannel(client, guildId, channel.id);
 
-                await channel.delete('Temporary voice channel - empty');
+                await channel.delete('Canal de voz temporal - vacío');
 
-                logger.info(`Deleted temporary voice channel ${channel.name} (${channel.id}) in guild ${channel.guild.name}`);
+                logger.info(`Canal de voz temporal ${channel.name} (${channel.id}) eliminado en ${channel.guild.name}`);
 
             } catch (error) {
-                logger.error(`Failed to delete temporary channel ${channel.id}:`, error);
+                logger.error(`Error al eliminar el canal temporal ${channel.id}:`, error);
             }
         }
 
@@ -255,16 +255,16 @@ userLimit: userLimit === 0 ? undefined : userLimit,
                         userTag: newOwner.user.tag,
                         displayName: newOwner.displayName,
                         guildName: channel.guild.name,
-                        channelName: channel.guild.channels.cache.get(tempChannelInfo.triggerChannelId)?.name || 'Voice Channel'
+                        channelName: channel.guild.channels.cache.get(tempChannelInfo.triggerChannelId)?.name || 'Canal de Voz'
                     }));
 
                     await channel.setName(newChannelName);
                 }
 
-                logger.info(`Transferred ownership of temporary channel ${channel.id} to user ${newOwnerId}`);
+                logger.info(`Transferida la propiedad del canal temporal ${channel.id} al usuario ${newOwnerId}`);
 
             } catch (error) {
-                logger.error(`Failed to transfer ownership of channel ${channel.id}:`, error);
+                logger.error(`Error al transferir la propiedad del canal ${channel.id}:`, error);
             }
         }
     }
