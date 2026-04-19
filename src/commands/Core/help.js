@@ -85,7 +85,7 @@ async function createInitialHelpMenu(client) {
         { name: "🎙️ **Vocales**", value: "Canales temporales automáticos", inline: true }
     );
 
-    embed.setFooter({ text: "Desarrollado con ❤️ para GhoulMC" });
+    embed.setFooter({ text: "ghoulmc.net 👻" });
     embed.setTimestamp();
 
     const bugReportButton = new ButtonBuilder()
@@ -94,8 +94,8 @@ async function createInitialHelpMenu(client) {
         .setStyle(ButtonStyle.Danger);
 
     const supportButton = new ButtonBuilder()
-        .setLabel("Servidor de Soporte")
-        .setURL("https://discord.gg/QnWNz2dKCE")
+        .setLabel("Tienda GhoulMC")
+        .setURL("")
         .setStyle(ButtonStyle.Link);
 
     const selectRow = createSelectMenu(
