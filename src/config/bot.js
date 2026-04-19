@@ -11,12 +11,12 @@ export const botConfig = {
   // =========================
   presence: {
     // Estado online: "online", "idle" (ausente), "dnd" (no molestar), "invisible"
-    status: "online",
+    status: "idle",
 
     // Líneas de actividad
     activities: [
       {
-        name: "GhoulMC.net", // Texto que verán los usuarios
+        name: "👻 ghoulmc.net", // Texto que verán los usuarios
         type: 0, // 0 = Jugando, 1 = Streaming, 2 = Escuchando, 3 = Viendo
       },
     ],
@@ -131,9 +131,9 @@ export const botConfig = {
   // =========================
   economy: {
     currency: {
-      name: "GhoulCoin",
-      namePlural: "GhoulCoins",
-      symbol: "☠️",
+      name: "Soul",
+      namePlural: "Souls",
+      symbol: "👻",
     },
     startingBalance: 100,
     baseBankCapacity: 100000,
