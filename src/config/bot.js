@@ -17,7 +17,7 @@ export const botConfig = {
   // - "invisible" = appears offline
   presence: {
     // Current online state shown on Discord.
-    status: "online",
+    status: "idle",
 
     // Activity lines shown under the bot name.
     // `type` number mapping from Discord:
@@ -30,7 +30,7 @@ export const botConfig = {
     activities: [
       {
         // Text users will see (example: "Playing /help | Titan Bot").
-        name: "Made with ❤️",
+        name: "ghoulmc.net",
         // Activity type number (0 = Playing).
         type: 0, 
       },
@@ -61,9 +61,9 @@ export const botConfig = {
   applications: {
     // Default questions shown when someone fills out an application.
     defaultQuestions: [
-      { question: "What is your name?", required: true },
-      { question: "How old are you?", required: true },
-      { question: "Why do you want to join?", required: true },
+      { question: "Cual es tu Nombre?", required: true },
+      { question: "Cuantos años tienes?", required: true },
+      { question: "Porque te quieres unir?", required: true },
     ],
 
     // Embed colors by application status.
@@ -141,7 +141,7 @@ export const botConfig = {
     },
     footer: {
       // Default footer text used in bot embeds.
-      text: "Titan Bot",
+      text: "Ghoul Bot",
       // Footer icon URL (null = no icon).
       icon: null,
     },
